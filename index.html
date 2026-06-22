@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Inventory Scanner</title>
+
+  <!-- Barcode scanner library -->
+  <script src="https://unpkg.com/html5-qrcode"></script>
+
+  <style>
+    body {
+      font-family: Arial;
+      text-align: center;
+      background: #f4f4f4;
+    }
+
+    #reader {
+      width: 300px;
+      margin: auto;
+      margin-top: 20px;
+    }
+
+    .box {
+      margin-top: 20px;
+      font-size: 22px;
+      padding: 10px;
+    }
+
+    .success { color: green; }
+    .error { color: red; }
+  </style>
+</head>
+
+<body>
+
+<h2>📦 Warehouse Scanner (Mock)</h2>
+
+<div id="reader"></div>
+
+<div class="box" id="output">
+  Scan a barcode to begin...
+</div>
+
+<script>
+
+// 🧠 STEP 3: Fake inventory database
+const inventory = {
+  "6001234567890": "Rice 10kg",
+  "6009876543210": "Cooking Oil 5L",
+  "1234567890123": "Sugar 2kg"
+};
+
+// 🔍 STEP 4: When scan succeeds
+function onScanSuccess(decodedText) {
+
+    let itemName = inventory[decodedText];
+
+    if (itemName) {
+        document.getElementById("output").innerHTML =
+            "✅ FOUND: " + itemName + " <br> Barcode: " + decodedText;
+        document.getElementById("output").className = "box success";
+    } else {
+        document.getElementById("output").innerHTML =
+            "❌ ITEM NOT FOUND <br> Barcode: " + decodedText;
+        document.getElementById("output").className = "box error";
+    }
+}
+
+// 📷 STEP 5: Start scanner
+let scanner = new Html5QrcodeScanner(
+    "reader",
+    { fps: 10, qrbox: 250 }
+);
+
+scanner.render(onScanSuccess);
+
+</script>
+
+</body>
+</html>
